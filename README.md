@@ -1,2 +1,2 @@
 # pony-memories-ru
-памятка по языку Pony
+Памятка по языку Pony

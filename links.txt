@@ -1,2 +1,10 @@
-﻿https://www.ponylang.io/learn/
+﻿
+Документация по языку (см. tutorial)
+https://www.ponylang.io/learn/
+
+Документация по библиотеке
+https://stdlib.ponylang.io
+
+Плагин для текстового редактора Atom
+https://atom.io/packages/language-pony
 
