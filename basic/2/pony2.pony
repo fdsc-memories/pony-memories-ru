@@ -146,6 +146,51 @@ actor Main
 
 		// Оператор "+" является алиасом функции add(...), см. ниже
 		env.out.print((ca + cb).string())
+		
+		env.out.print("----------------------------------")
+
+		// Здесь будет переполнение без ошибки
+		var x10  = U32.max_value() + 1
+		if ((U32.max_value() + 1) == x10) then
+			// U32.max_value() + 1 == x10 is true
+			// Никакого контроля переполнения он не делает, хотя в справке написано, что делает
+			env.out.print("U32.max_value() + 1 == x10 is true")	// Это будет выведено
+		end
+
+		env.out.print("U32.max_value() + 1: " + x10.string())  // 0
+		
+		x10 = U32.max_value() +~ U32(1) // значение остаётся тем же, что и было ранее: похоже на ошибку в компиляторе, причём она не повторяется отдельно
+		env.out.print("U32.max_value() +~ 1: " + x10.string())  // 4294967295
+
+		var null: U32 = 0
+		x10 = x10 / null
+		env.out.print("x10 / 0: " + x10.string())  // тоже 0
+		env.out.print("10 % 6: " + U32(10 %  6).string())  // 4
+		var x128: I8 = -128
+		x128 = -x128
+		env.out.print("-(-128): " + x128.string())  // -128
+
+		// Partial and Checked Arithmetic
+		let x10e = 
+		try
+			U32.max_value() +? U32(1)
+		else
+			env.out.print("error with adding") 
+		end
+
+		env.out.print("U32.max_value() +? U32(1): " + x10e.string())  // None
+
+		// https://tutorial.ponylang.io/expressions/arithmetic.html#unsafe-conversion
+		// Преобразования чисел из формата в формат
+
+		let x12 = I32(12).f32()
+		env.out.print("I32(12).f32(): " + x12.string())  // 12
+		let x13 = U32(1) / U32(3)
+		env.out.print("1 / 3: " + x13.string())  // 0
+		
+		x10 = U32.max_value() - U32(1)
+		x10 = x10 + 3	// += - здесь такого нет
+		env.out.print("U32.max_value() - U32(1) + 3: " + x10.string())  // 1 - проверить позже на обоих операциях + и +~, т.к. и там, и там даёт переполнение
 
 
 // Примитивный тип - не имеет никаких полей
@@ -201,7 +246,7 @@ primitive ColourList
     [Red; Green; Blue]
 
 
-// Интерфейсы используют утиную типизацию
+// Интерфейсы используют утиную типизацию (structural typing)
 // То есть интерфейс автоматически наследуется, если есть все методы из этого интерфейса
 interface HasName
 	fun name(): String
@@ -323,6 +368,25 @@ struct ComplexValue
 /*
 Переопределение and и or даёт полное вычисление условий if (x and y) и if (x or y)
 То есть сокращённое вычисление условий применяется только для булевских типов
+*/
+
+/*
+Приоритеты операторов см. https://tutorial.ponylang.io/expressions/ops.html
+Раздел Precedence
+
+Унарные операторы применяются перед бинарными not a == b  <==>  (not a) == b
+
+Инфиксные операторы не имеют приоритетов
+1 + 2 * 3  // Compilation failed.
+1 + (2 * 3)  // 7
+
+То есть нужно явно использовать скобки абсолютно всегда, если в наличии хотя бы два разных инфиксных оператора, иначе будет ошибка
+
+1 + 2 * -3  // Compilation failed.
+1 + (2 * -3)  // -5
+
+Работает:
+1 + -(2 * -3)  // 7
 */
 
 // https://tutorial.ponylang.io/expressions/ops.html
