@@ -35,7 +35,22 @@ actor Main
 		env.out.print(
 			a1.func5({(u: U32)(e = env) => e.out.print("lambda2"); u }).string()
 		)
+		
+		
+		// Частичное применение (Partial Application)
+		let xxx: XXX = XXX
+		let f = xxx~getX(where env = env)	// Применяем операнд не по-очереди
+		let g = f~apply(3)					// Частично применяем частичное применение
+		env.out.print("g() = " + g().string())	// Делаем вызов уже без параметров
 
+
+
+struct XXX
+	let x: U32 = 0
+
+	fun getX(add: U32, env: Env): U32 =>
+		env.out.print("XXX.getX")
+		add + x
 
 class AAA
 	// Параметр является неизменяемым

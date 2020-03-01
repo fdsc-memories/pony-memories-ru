@@ -141,8 +141,8 @@ actor Main
 		var a = Aliases
 		a.getAliases(env)
 
-		let ca = ComplexValue(1, 5)
-		let cb = ComplexValue(2, 7)
+		let ca = ComplexValue(1, 5, env)
+		let cb = ComplexValue(2, 7, env)
 
 		// Оператор "+" является алиасом функции add(...), см. ниже
 		env.out.print((ca + cb).string())
@@ -191,6 +191,22 @@ actor Main
 		x10 = U32.max_value() - U32(1)
 		x10 = x10 + 3	// += - здесь такого нет
 		env.out.print("U32.max_value() - U32(1) + 3: " + x10.string())  // 1 - проверить позже на обоих операциях + и +~, т.к. и там, и там даёт переполнение
+		
+		// "is" проверяет на равенство идентичностей (то есть равенство ссылок)
+		// None - единственный объект (синглтон), так что можно проверять на равенство
+		let xNone = None
+		if xNone is None then
+			None
+		end
+
+		// fun eq(that: box->Foo): Bool
+		// Будет вызван ComplexValue.eq при сравнении ==, и ComplexValue.ne при сравнении !=
+		// При сравнении примитивы сравниваются оператором "is", т.к. они - синглтоны
+		if ca != cb then
+			None
+		else
+			None
+		end
 
 
 // Примитивный тип - не имеет никаких полей
@@ -352,14 +368,29 @@ class Aliases
 struct ComplexValue
 	let real: F64
 	let img : F64
-	
-	new create(real': F64, img': F64) =>
+	let env : Env
+
+	fun eq(e: ComplexValue): Bool =>
+
+		env.out.print("ComplexValue.eq")
+
+		if real != e.real then
+			return false
+		end
+
+		img == e.img
+
+	fun ne(e: ComplexValue): Bool =>
+		not eq(e)
+
+	new create(real': F64, img': F64, env': Env) =>
 		real = real'
 		img  = img'
+		env  = env'
 
 	// Теперь можно использовать оператор "+", он определится автоматически
 	fun add(x: ComplexValue): ComplexValue =>
-		ComplexValue(real + x.real, img + x.img)
+		ComplexValue(real + x.real, img + x.img, env)
 
 	fun string(): String =>
 		let s: String = "(" + real.string() + ", " + img.string() + ")"
