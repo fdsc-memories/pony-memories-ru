@@ -25,6 +25,7 @@ actor Main
 		var four: U32 = 4
 		var five: U32 = 5
 
+
 		// Объектный литерал (инлайн-объект)
 		// Может реализовывать типажи, то есть object is ...
 		// Можно объявлять как object iso is Applied, например
@@ -39,7 +40,7 @@ actor Main
 				env.out.print("inline object apply: " + four.string() + ", " + five.string())
 				// inline object apply: 3, 5
 
-			fun second(env: Env) =>
+			fun tag second(env: Env) =>
 				env.out.print("inline object second")
 		end
 
@@ -47,17 +48,16 @@ actor Main
 		five = 6
 
 		after(inline)
-		// afterAsync(inline)  // Как это вызвать?
 
 		env.out.print("main2. four == " + four.string())	// main2. four == 5
 
 
 	fun after(obj: Applied) =>
 		obj(env)
-
+/*
 	be afterAsync(obj: Applied val) =>
 		obj.second(env)
-
+*/
 
 trait Applied
 	fun ref apply(env: Env)

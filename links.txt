@@ -1,6 +1,7 @@
 ﻿
 Документация по языку (см. tutorial)
 https://www.ponylang.io/learn/
+https://bluishcoder.co.nz/2016/05/04/bang-hat-and-arrow-in-pony.html
 
 Документация по библиотеке
 https://stdlib.ponylang.io

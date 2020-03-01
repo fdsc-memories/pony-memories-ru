@@ -21,3 +21,6 @@ basic/6
 	Функции create, apply, update (синтаксический сахар)
 	Анонимные типы и объектные литералы
 
+basic/7
+	Способности ссылок (reference capabilities)
+	

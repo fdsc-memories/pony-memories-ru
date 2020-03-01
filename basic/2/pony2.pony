@@ -320,7 +320,7 @@ type Float is (F32 | F64)
 */
 
 
-
+// Структуры - это классы для FFI
 struct Inner
 	var x: I32 = 0
 
@@ -352,11 +352,12 @@ class Aliases
 		var b: AAlias1 iso = AAlias1
 
 		//  c: Array[A iso!]
-		// Насчёт "!" не понял
-		// https://tutorial.ponylang.io/expressions/literals.html см. в конце
+		// Насчёт "!" https://tutorial.ponylang.io/expressions/literals.html см. в конце
+		// https://tutorial.ponylang.io/reference-capabilities/aliasing.html тоже в конце
 		// Похоже, что типы должны быть приведены к A iso с точки зрения reference capabilites
 		// Потому что если убрать "!", то переменная "a" будет неверного типа
-		// Как видно, алиасы совершенно спокойно заходят в такой массив
+		// (она будет типа A ref)
+		// Как видно, алиасы, сделанные type, совершенно спокойно заходят в такой массив
 		var c: Array[A iso!] = 
 		[
 			a
