@@ -23,4 +23,6 @@ basic/6
 
 basic/7
 	Способности ссылок (reference capabilities)
-	
+
+files
+	Операции с файлами
