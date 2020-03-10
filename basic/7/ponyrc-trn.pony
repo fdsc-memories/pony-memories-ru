@@ -31,54 +31,22 @@ class TrnIllustrator
 
 		d.inc()
 		d.getX()
-/*
-
-		var e: ActorTrn = ActorTrn
-		e.y(c1)
-		// e.y(c3) // это нельзя, т.к. tag к val не приводится
-		// Это можно только с "потреблением" ссылки,
-		// т.к. iso-ссылка должна существовать в единственном экземпляре
-		a.inc()
-		e.y(consume a)
-
-		var b2: AAATrn val = consume b
-		var b3: AAATrn val = b2
-		e.y(b2)
-		e.y(b3)
-
-		e.printState(env)
 		
-		// Так нельзя
-		// can't use a consumed local or field in an expression
-		// a.getX()
-		// b.getX()
-		
-		b3.getX()
-		// b3.inc() // так нельзя, т.к. val не приводим к ref
+		var a2: AAATrn box = a
+		var a3: AAATrn trn = consume a
 
-		var m1: AAATrn = AAATrn
-		// var m2: AAATrn = m1
-		// Так нельзя
-		// AAATrn iso! is not a subtype of AAATrn iso: iso! is not a subcap of iso
-		// Здесь нужно использовать consume, т.к. копировать iso не получится
+		// Как видим выше, trn можно делать только один, как и iso
+		// Зато из trn можно создавать сколько угодно неизменяемых box
+		// Только одна ссылка в акторе изменяется, остальные - для чтения
+		// В других акторах данный объект недоступен
 
-		// Вот это можно. iso! является алиасом ссылки m1 и приводим к AAATrn tag
-		var m2: AAATrn iso! = m1
-		var m3: AAATrn tag  = m2
+		// По сути, trn - тот же ref, но с одной ссылкой для изменения
+		// При этом trn, ref и box всегда работают строго последовательно в одном акторе,
+		// поэтому проблем с параллелизмом нет никаких
 
+		a3.inc()
+		env.out.print("a2.getX() == " + a2.getX().string())
 
-		var k = 
-		object iso is TraitTrn
-			var x: U64 = 1
-			// Здесь iso-ссылка будет неявно приведена к ref, т.е. это можно вызывать из-под iso
-			fun ref apply() =>
-				x = x + 1
-		end
-
-		k()
-		var k2: TraitTrn val = consume k
-		e.r(k2)
-*/
 
 trait TraitTrn
 	fun ref apply()
